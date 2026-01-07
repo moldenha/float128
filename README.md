@@ -4,6 +4,8 @@
 
 `float128` is a **constexpr-capable, header-only C++17 library** that provides a 128-bit floating-point type and related math functionality. It was originally developed as part of the [NeuroTensor](https://github.com/moldenha/NeuroTensor.git) framework and extracted to be standalone for reuse.
 
+**There are very few constexpr-capable, header-only implementations of IEEE-style quad-precision floating point in C++ — this library exists to fill that gap.**
+
 ## Features
 
 -   **128-bit floating-point type** (`nt::float128_t`)
