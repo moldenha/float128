@@ -1,0 +1,56 @@
+#include "pow_ten_lookup.h"
+#include "float128_impl.h"
+#include <array>
+#include <cstdlib>
+
+namespace nt::float128_func{
+
+static std::array<float128_t, 4934> make_pow_tens_positive(){
+    std::array<float128_t, 4934> out_arr;
+    out_arr[0] = nt::float128_t(1);
+    for(uint32_t i = 1; i < 4933; ++i){
+        out_arr[i] = out_arr[i-1] * 10;
+    }
+    out_arr[4933] = nt::float128_t::make_inf(false);
+    return out_arr;
+}
+
+static std::array<float128_t, 4934> pow_tens_positive =  make_pow_tens_positive();
+
+static std::array<float128_t, 4968> make_pow_tens_negative(){
+    std::array<float128_t, 4968> out_arr;
+    out_arr[0] = nt::float128_t(1);
+    for(uint32_t i = 1; i < 4967; ++i){
+        out_arr[i] = out_arr[i-1] / 10;
+    }
+    out_arr[4967] = nt::float128_t::make_zero();
+    return out_arr;
+}
+
+static std::array<float128_t, 4968> pow_tens_negative =  make_pow_tens_negative();
+
+#ifdef NT_FLOAT128_HEADER_ONLY__
+#define TENTH_POWER_START NT_ALWAYS_INLINE 
+#else
+#define TENTH_POWER_START 
+#endif
+
+TENTH_POWER_START float128_t tenth_power(int64_t power){
+    if(power >= 0){
+        if(power > 4933){
+            return float128_t::make_inf(false);
+        }
+        return pow_tens_positive[power];
+    }
+    power = -power;
+    if(power > 4967){
+        return float128_t::make_zero();
+    }
+    return pow_tens_negative[power];
+}
+
+}
+
+
+
+
